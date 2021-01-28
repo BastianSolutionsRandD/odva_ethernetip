@@ -92,7 +92,7 @@ public:
   /**
    * Create the forward open request from the data in this connection object
    */
-  shared_ptr<ForwardOpenRequest> createForwardOpenRequest();
+  shared_ptr<ForwardOpenRequest> createForwardOpenRequest(EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN);
 
   /**
    * Create a forward close request from the data in this connection object

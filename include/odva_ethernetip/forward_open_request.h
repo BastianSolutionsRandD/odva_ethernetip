@@ -34,6 +34,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include "odva_ethernetip/serialization/reader.h"
 #include "odva_ethernetip/serialization/writer.h"
 #include "odva_ethernetip/path.h"
+#include <iostream>
 
 using boost::shared_ptr;
 
@@ -90,19 +91,27 @@ public:
    * @param shared If set to true, then a shared connection
    */
   static EIP_DWORD calcConnectionParams(EIP_UINT size, bool variable, EIP_BYTE priority,
-    EIP_BYTE type, bool shared)
+    EIP_BYTE type, bool shared, EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN)
   {
-    return (size & 0x7FFF) | (variable ? 0x2000000 : 0) | (priority & 0x03) << 26
-      | (type & 0x03) << 29 | (shared ? 0x80000000 : 0);
+    if(connection == EIP_LARGE_FORWARD_OPEN)
+    {
+      return (size & 0x7FFF) | (variable ? 0x2000000 : 0) | (priority & 0x03) << 26
+          | (type & 0x03) << 29 | (shared ? 0x80000000 : 0);
+    }
+    else // for EIP_FORWARD_OPEN connection type
+    {
+      return (size & 0x1FF) | (variable ? 0x0200 : 0) | (priority & 0x03) << 10
+          | (type & 0x03) << 13 | (shared ? 0x8000 : 0);
+    }
   }
 
   /**
    * Shortcut to set the origin to target parameters.
    */
   EIP_DWORD setOriginToTargetParams(EIP_UINT size, bool variable, EIP_BYTE priority,
-    EIP_BYTE type, bool shared)
+    EIP_BYTE type, bool shared, EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN)
   {
-    o_to_t_conn_params = calcConnectionParams(size, variable, priority, type, shared);
+    o_to_t_conn_params = calcConnectionParams(size, variable, priority, type, shared, connection);
     return 0;
   }
 
@@ -110,9 +119,9 @@ public:
    * Shortcut to set the target to origin params.
    */
   EIP_DWORD setTargetToOriginParams(EIP_UINT size, bool variable, EIP_BYTE priority,
-    EIP_BYTE type, bool shared)
+    EIP_BYTE type, bool shared, EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN)
   {
-    t_to_o_conn_params = calcConnectionParams(size, variable, priority, type, shared);
+    t_to_o_conn_params = calcConnectionParams(size, variable, priority, type, shared, connection);
     return 0;
   }
 

@@ -94,6 +94,17 @@ typedef enum
   EIP_ITEM_SEQ_ADDRESS                = 0x8002,
 } EIP_ITEM_T;
 
+typedef enum
+{
+  EIP_FORWARD_CLOSE           = 0x4E,
+  EIP_UNCONNECTED_SEND        = 0x52,
+  EIP_FORWARD_OPEN            = 0x54,
+  EIP_GET_CONNECTION_DATA     = 0x56,
+  EIP_SEARCH_CONNECTION_DATA  = 0x57,
+  EIP_GET_CONNECTION_OWNER    = 0x5A,
+  EIP_LARGE_FORWARD_OPEN      = 0x5B
+} EIP_CONNECTION_MANAGER;
+
 typedef struct
 {
   /// Assembly ID for this endpoint of the connection

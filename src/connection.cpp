@@ -56,7 +56,7 @@ void Connection::setConnectionPoints(EIP_USINT origin, EIP_USINT target)
   path_.addLogicalConnectionPoint(target);
 }
 
-shared_ptr<ForwardOpenRequest> Connection::createForwardOpenRequest()
+shared_ptr<ForwardOpenRequest> Connection::createForwardOpenRequest(EIP_CONNECTION_MANAGER connection)
 {
   shared_ptr<ForwardOpenRequest> req = make_shared<ForwardOpenRequest> ();
 
@@ -76,8 +76,8 @@ shared_ptr<ForwardOpenRequest> Connection::createForwardOpenRequest()
   req->conn_type = 1;
 
   // TODO: need connection size info here
-  req->setOriginToTargetParams(o_to_t_buffer_size, false, CONN_PRIORITY_SCHEDULED, CONN_TYPE_P2P, false);
-  req->setTargetToOriginParams(t_to_o_buffer_size, true, CONN_PRIORITY_SCHEDULED, CONN_TYPE_P2P, false);
+  req->setOriginToTargetParams(o_to_t_buffer_size, false, CONN_PRIORITY_SCHEDULED, CONN_TYPE_P2P, false, connection);
+  req->setTargetToOriginParams(t_to_o_buffer_size, true, CONN_PRIORITY_SCHEDULED, CONN_TYPE_P2P, false, connection);
 
   req->getPath() = path_;
   return req;

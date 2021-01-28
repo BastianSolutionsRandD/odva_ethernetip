@@ -1,21 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(odva_ethernetip)
 
-find_package(catkin REQUIRED)
-
 find_package(console_bridge REQUIRED)
 find_package(Boost 1.47 REQUIRED COMPONENTS system)
+find_package(GTest REQUIRED)
 
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-  DEPENDS Boost console_bridge
-)
 
 include_directories(
   include
   ${Boost_INCLUDE_DIRS}
   ${console_bridge_INCLUDE_DIRS}
+  ${GTEST_INCLUDE_DIRS}
 )
 
 ## Declare a cpp library for just Ethernet/IP generic stuff
@@ -38,18 +33,7 @@ target_link_libraries(${PROJECT_NAME}
   ${console_bridge_LIBRARIES}
 )
 
-## Mark executables and libraries for installation
-install(TARGETS ${PROJECT_NAME}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
-
-if (CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(${PROJECT_NAME}-test
+set(${PROJECT_NAME}_TESTS
     test/serialization/buffer_writer_test.cpp
     test/serialization/buffer_reader_test.cpp
     test/serialization/stream_writer_test.cpp
@@ -74,8 +58,14 @@ if (CATKIN_ENABLE_TESTING)
     test/forward_close_request_test.cpp
     test/forward_close_success_test.cpp
     test/session_test.cpp
-    test/test_main.cpp
-  )
-  target_link_libraries(${PROJECT_NAME}-test ${Boost_LIBRARIES} ${PROJECT_NAME})
-endif()
+)
+
+add_executable(${PROJECT_NAME}-test test/test_main.cpp ${${PROJECT_NAME}_TESTS})
+target_link_libraries(${PROJECT_NAME}-test 
+                          ${Boost_LIBRARIES} 
+                          ${PROJECT_NAME} 
+                          ${GTEST_LIBRARIES} 
+                          gtest 
+                          pthread
+)
 

@@ -153,7 +153,7 @@ public:
    * @param t_to_o Target to origin connection info
    */
   int createConnection(const EIP_CONNECTION_INFO_T& o_to_t,
-    const EIP_CONNECTION_INFO_T& t_to_o);
+    const EIP_CONNECTION_INFO_T& t_to_o, EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN);
 
   /**
    * Close the given connection number
