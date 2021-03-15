@@ -294,9 +294,9 @@ RRDataResponse Session::sendRRDataCommand(EIP_USINT service, const Path& path,
 }
 
 int Session::createConnection(const EIP_CONNECTION_INFO_T& o_to_t,
-  const EIP_CONNECTION_INFO_T& t_to_o, EIP_CONNECTION_MANAGER connection)
+  const EIP_CONNECTION_INFO_T& t_to_o, EIP_USINT logical_instance, EIP_CONNECTION_MANAGER connection)
 {
-  Connection conn(o_to_t, t_to_o);
+  Connection conn(o_to_t, t_to_o, logical_instance);
   conn.originator_vendor_id = my_vendor_id_;
   conn.originator_sn = my_serial_num_;
   conn.connection_sn = next_connection_sn_++;
@@ -304,7 +304,7 @@ int Session::createConnection(const EIP_CONNECTION_INFO_T& o_to_t,
   conn.t_to_o_connection_id = next_connection_id_++;
 
   shared_ptr<ForwardOpenRequest> req = conn.createForwardOpenRequest(connection);
-  RRDataResponse resp_data = sendRRDataCommand(0x5B, Path(0x06, 1), req);
+  RRDataResponse resp_data = sendRRDataCommand(connection, Path(0x06, 1), req);
   ForwardOpenSuccess result;
   resp_data.getResponseDataAs(result);
   if (!conn.verifyForwardOpenResult(result))

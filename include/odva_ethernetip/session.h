@@ -151,9 +151,11 @@ public:
    * Create an Ethernet/IP Connection for sending implicit messages
    * @param o_to_t Origin to target connection info
    * @param t_to_o Target to origin connection info
+   * @param logical_instance
+   * @param connection
    */
   int createConnection(const EIP_CONNECTION_INFO_T& o_to_t,
-    const EIP_CONNECTION_INFO_T& t_to_o, EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN);
+    const EIP_CONNECTION_INFO_T& t_to_o, EIP_USINT logical_instance=1, EIP_CONNECTION_MANAGER connection=EIP_LARGE_FORWARD_OPEN);
 
   /**
    * Close the given connection number

@@ -70,8 +70,9 @@ public:
    * Create a connection instance using the directional values and reasonable defaults
    * @param o_to_t Originator to Target info
    * @param t_to_o Target to Originator info
+   * @param logical_instance
    */
-  Connection(const EIP_CONNECTION_INFO_T& o_to_t, const EIP_CONNECTION_INFO_T& t_to_o);
+  Connection(const EIP_CONNECTION_INFO_T& o_to_t, const EIP_CONNECTION_INFO_T& t_to_o, EIP_USINT logical_instance=1);
 
   /**
    * Get the path in the given message router request
@@ -86,8 +87,9 @@ public:
    * Shortcut to set the path based on connection points
    * @param origin starting connection point
    * @param target ending connection point
+   * @param logical_instance
    */
-  void setConnectionPoints(EIP_USINT origin, EIP_USINT target);
+  void setConnectionPoints(EIP_USINT origin, EIP_USINT target, EIP_USINT logical_instance=1);
 
   /**
    * Create the forward open request from the data in this connection object

@@ -77,9 +77,9 @@ public:
   EIP_UDINT originator_sn;
   EIP_USINT timeout_multiplyer;
   EIP_UDINT o_to_t_rpi;
-  EIP_DWORD o_to_t_conn_params;
+  EIP_UINT o_to_t_conn_params;
   EIP_UDINT t_to_o_rpi;
-  EIP_DWORD t_to_o_conn_params;
+  EIP_UINT t_to_o_conn_params;
   EIP_BYTE conn_type;
 
   /**

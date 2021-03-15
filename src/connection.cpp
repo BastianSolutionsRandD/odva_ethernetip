@@ -33,7 +33,7 @@ using boost::make_shared;
 
 namespace eip {
 
-Connection::Connection(const EIP_CONNECTION_INFO_T& o_to_t, const EIP_CONNECTION_INFO_T& t_to_o)
+Connection::Connection(const EIP_CONNECTION_INFO_T& o_to_t, const EIP_CONNECTION_INFO_T& t_to_o, EIP_USINT logical_instance)
 {
   o_to_t_rpi = o_to_t.rpi;
   t_to_o_rpi = t_to_o.rpi;
@@ -44,14 +44,14 @@ Connection::Connection(const EIP_CONNECTION_INFO_T& o_to_t, const EIP_CONNECTION
   timeout_multiplyer = 0;
   o_to_t_api = 0;
   t_to_o_api = 0;
-  setConnectionPoints(o_to_t.assembly_id, t_to_o.assembly_id);
+  setConnectionPoints(o_to_t.assembly_id, t_to_o.assembly_id, logical_instance);
 }
 
-void Connection::setConnectionPoints(EIP_USINT origin, EIP_USINT target)
+void Connection::setConnectionPoints(EIP_USINT origin, EIP_USINT target, EIP_USINT logical_instance)
 {
   path_.reset();
   path_.addLogicalClass(0x04);
-  path_.addLogicalInstance(1);
+  path_.addLogicalInstance(logical_instance);
   path_.addLogicalConnectionPoint(origin);
   path_.addLogicalConnectionPoint(target);
 }

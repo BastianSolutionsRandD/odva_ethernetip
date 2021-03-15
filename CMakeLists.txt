@@ -1,17 +1,17 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(odva_ethernetip)
 
+find_package(ament_cmake REQUIRED)
 find_package(console_bridge REQUIRED)
 find_package(Boost 1.47 REQUIRED COMPONENTS system)
 find_package(GTest REQUIRED)
 
-
-include_directories(
-  include
-  ${Boost_INCLUDE_DIRS}
-  ${console_bridge_INCLUDE_DIRS}
-  ${GTEST_INCLUDE_DIRS}
-)
+# message(ERROR "test print")
+# message(ERROR "${console_bridge_LIBRARIES}")
+# message(ERROR "${console_bridge_INCLUDE_DIRS}")
+# message(ERROR "${console_bridge_SRC}")
+# message(ERROR "${Boost_LIBRARIES}")
+# message(ERROR "${Boost_INCLUDE_DIR}")
 
 ## Declare a cpp library for just Ethernet/IP generic stuff
 add_library(${PROJECT_NAME}
@@ -28,9 +28,17 @@ add_library(${PROJECT_NAME}
   src/rr_data.cpp
   src/session.cpp
 )
-target_link_libraries(${PROJECT_NAME}
-  ${Boost_LIBRARIES}
-  ${console_bridge_LIBRARIES}
+# target_link_libraries(${PROJECT_NAME}
+#   PRIVATE
+#     ${Boost_LIBRARIES}
+#     ${console_bridge_LIBRARIES}
+# )
+target_include_directories(${PROJECT_NAME} 
+  PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+    $<INSTALL_INTERFACE:include>
+  PRIVATE
+    ${console_bridge_INCLUDE_DIRS}
 )
 
 set(${PROJECT_NAME}_TESTS
@@ -62,10 +70,39 @@ set(${PROJECT_NAME}_TESTS
 
 add_executable(${PROJECT_NAME}-test test/test_main.cpp ${${PROJECT_NAME}_TESTS})
 target_link_libraries(${PROJECT_NAME}-test 
-                          ${Boost_LIBRARIES} 
-                          ${PROJECT_NAME} 
-                          ${GTEST_LIBRARIES} 
-                          gtest 
-                          pthread
+  PRIVATE
+    ${Boost_LIBRARIES} 
+    ${PROJECT_NAME} 
+    ${GTEST_LIBRARIES} 
+    gtest 
+    pthread
 )
 
+ament_target_dependencies(
+  ${PROJECT_NAME} 
+    console_bridge
+    Boost
+)
+
+ament_export_targets(export_odva_ethernetip HAS_LIBRARY_TARGET)
+
+ament_export_dependencies(
+    console_bridge
+    Boost
+)
+
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+
+install(
+  TARGETS odva_ethernetip
+  EXPORT export_odva_ethernetip
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+)
+
+ament_package()

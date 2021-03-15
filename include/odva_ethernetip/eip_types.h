@@ -105,14 +105,40 @@ typedef enum
   EIP_LARGE_FORWARD_OPEN      = 0x5B
 } EIP_CONNECTION_MANAGER;
 
-typedef struct
+typedef struct EIP_CONNECTION_INFO_T
 {
   /// Assembly ID for this endpoint of the connection
   EIP_USINT assembly_id;
+
   /// Buffer size to be used for routing
   EIP_UINT buffer_size;
+
   /// Request packet interval
   EIP_UDINT rpi;
+
+  // For unconnected Ethernet/IP messages (TCP), the timeout_tick_size and
+  // timeout_ticks determine the actual timeout according to the following
+  // formula actual_timeout = 2^timeout_tick_size * timeout_ticks
+
+  // Tick size in milliseconds
+  EIP_BYTE timeout_tick_size;
+
+  // Timeout duration in number of ticks
+  EIP_USINT timeout_ticks;
+
+  // For connected Ethernet/IP messages (UDP), the timeout multiplier times
+  // the Actual Packet Rate (API) determines the message timeout using the
+  // this formula timeout = 2^(2 + timeout_multiplier) * API
+  EIP_USINT timeout_multiplier;
+
+  EIP_CONNECTION_INFO_T():
+    assembly_id(0),
+    buffer_size(0),
+    rpi(0),
+    timeout_tick_size(6), // Defined for backwards compatibility
+    timeout_ticks(80), // Defined for backwards compatibility
+    timeout_multiplier(0) // Defined for backwards compatibility
+  {}
 } EIP_CONNECTION_INFO_T;
 
 #endif  // ODVA_ETHERNETIP_EIP_TYPES_H
