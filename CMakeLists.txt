@@ -74,7 +74,7 @@ target_link_libraries(${PROJECT_NAME}-test
     ${Boost_LIBRARIES} 
     ${PROJECT_NAME} 
     ${GTEST_LIBRARIES} 
-    gtest 
+    gtest
     pthread
 )
 
