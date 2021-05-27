@@ -55,7 +55,7 @@ Session::Session(shared_ptr<Socket> socket, shared_ptr<Socket> io_socket,
 {
   // generate pseudo-random connection ID and connection SN starting points
   boost::random::mt19937 gen;
-  gen.seed(std::time(0));
+  gen.seed(std::time(0)); // TODO change this to pull time in nanoseconds
   boost::random::uniform_int_distribution<> dist(0, 0xFFFF);
   next_connection_id_ = gen();
   next_connection_sn_ = dist(gen);

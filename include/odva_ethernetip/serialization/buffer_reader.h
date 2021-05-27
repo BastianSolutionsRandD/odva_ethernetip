@@ -84,7 +84,8 @@ public:
   {
     if (buffer_size(buf_) < n)
     {
-      throw std::length_error("Buffer too small to deserialize value");
+      throw std::length_error("Buffer too small to deserialize value. Expected size: " + std::to_string(n) +
+        " Got Size: " + std::to_string(buffer_size(buf_)) + ". ");
     }
     mutable_buffer b = buffer(buf_, n);
     byte_count_ += n;
@@ -104,7 +105,8 @@ public:
     size_t n = buffer_size(buf);
     if (buffer_size(buf_) < n)
     {
-      throw std::length_error("Buffer too small to deserialize value");
+      throw std::length_error("Buffer too small to deserialize value. Expected size: " + std::to_string(buffer_size(buf_)) +
+        " Got Size: " + std::to_string(n) + ". ");
     }
     boost::asio::buffer_copy(buf, buf_);
     byte_count_ += n;
